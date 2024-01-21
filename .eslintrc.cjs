@@ -17,5 +17,6 @@ module.exports = {
       'error',
       { args: 'all', argsIgnorePattern: '^_' },
     ],
+    '@typescript-eslint/no-misused-promises': 'off',
   },
 };
