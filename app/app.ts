@@ -3,6 +3,7 @@ import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import helmet from 'helmet';
 import { expressjwt } from 'express-jwt';
+import favicon from 'serve-favicon';
 import { selectUserById } from '../db/db';
 import authRouter from '../routes/auth';
 
@@ -11,6 +12,7 @@ export const app = express();
 app.set('view engine', 'pug');
 app.use(helmet());
 app.use(cookieParser());
+app.use(favicon('./public/favicon.ico'));
 app.use(morgan('tiny'));
 app.use(express.urlencoded({ extended: true }));
 app.use(
