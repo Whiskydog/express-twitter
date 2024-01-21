@@ -1,6 +1,7 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
+import helmet from 'helmet';
 import { expressjwt } from 'express-jwt';
 import { selectUserById } from '../db/db';
 import authRouter from '../routes/auth';
@@ -8,6 +9,7 @@ import authRouter from '../routes/auth';
 export const app = express();
 
 app.set('view engine', 'pug');
+app.use(helmet());
 app.use(cookieParser());
 app.use(morgan('tiny'));
 app.use(express.urlencoded({ extended: true }));

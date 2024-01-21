@@ -34,6 +34,7 @@
     "drizzle-zod": "^0.5.1",
     "express": "^4.18.2",
     "express-jwt": "^8.4.1",
+    "helmet": "^7.1.0",
     "morgan": "^1.10.0",
     "nanoid": "^5.0.4",
     "pug": "^3.0.2",
