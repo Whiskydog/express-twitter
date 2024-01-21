@@ -56,4 +56,8 @@ authRouter.post('/register', async (req, res, next) => {
   }
 });
 
+authRouter.post('/logout', (_req, res) => {
+  res.clearCookie('access_token').redirect('/login');
+});
+
 export default authRouter;
