@@ -1,23 +1,46 @@
 import express from 'express';
-import { insertUser, requestInsertUserSchema } from '../db/db';
+import {
+  insertUser,
+  requestInsertUserSchema,
+  requestSelectUserSchema,
+  selectUserByUsername,
+} from '../db/db';
 import { nanoid } from 'nanoid';
-import { hash } from 'bcrypt';
+import { compare, hash } from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 const authRouter = express.Router();
 
-authRouter.get('/login', (_req, res) => {
+authRouter.get('/login', (req, res) => {
+  if (req.auth) return res.redirect('/');
   res.render('login');
 });
 
-authRouter.post('/login', (_req, res) => {
-  res.redirect('/');
+authRouter.post('/login', async (req, res, next) => {
+  try {
+    const { username, password } = requestSelectUserSchema.parse(req.body);
+    const matchedUsers = await selectUserByUsername(username);
+    if (matchedUsers.length === 0) return res.redirect('/login');
+    const user = matchedUsers[0];
+    const isPasswordCorrect = await compare(password, user.password);
+    if (!isPasswordCorrect) return res.redirect('/login');
+    const accessToken = jwt.sign(
+      { userId: user.userId },
+      process.env.ACCESS_TOKEN_SECRET!,
+      { expiresIn: '2h' }
+    );
+    res.cookie('access_token', accessToken, { httpOnly: true }).redirect('/');
+  } catch (error) {
+    next(error);
+  }
 });
 
-authRouter.get('/register', (_req, res) => {
+authRouter.get('/register', (req, res) => {
+  if (req.auth) return res.redirect('/');
   res.render('register');
 });
 
-authRouter.post('/register', async (req, res) => {
+authRouter.post('/register', async (req, res, next) => {
   try {
     const user = requestInsertUserSchema.parse(req.body);
     const userInsert = {
@@ -28,9 +51,8 @@ authRouter.post('/register', async (req, res) => {
     };
     await insertUser(userInsert);
     res.redirect('/login');
-  } catch (e) {
-    console.log(e);
-    res.status(500).redirect('/login');
+  } catch (error) {
+    next(error);
   }
 });
 

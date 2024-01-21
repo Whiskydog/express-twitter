@@ -18,5 +18,6 @@ module.exports = {
       { args: 'all', argsIgnorePattern: '^_' },
     ],
     '@typescript-eslint/no-misused-promises': 'off',
+    '@typescript-eslint/no-unsafe-member-access': 'off',
   },
 };

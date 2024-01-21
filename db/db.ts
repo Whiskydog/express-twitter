@@ -1,7 +1,8 @@
 import { createClient } from '@libsql/client';
 import { drizzle } from 'drizzle-orm/libsql';
 import { sqliteTable, text } from 'drizzle-orm/sqlite-core';
-import { createInsertSchema } from 'drizzle-zod';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
+import { eq } from 'drizzle-orm';
 
 const client = createClient({
   url: `file:${process.env.DB_URL}`,
@@ -25,4 +26,18 @@ export const requestInsertUserSchema = insertUserSchema.pick({
 type InsertUser = typeof users.$inferInsert;
 export const insertUser = async (user: InsertUser) => {
   return db.insert(users).values(user);
+};
+
+const selectUserSchema = createSelectSchema(users);
+export const requestSelectUserSchema = selectUserSchema.pick({
+  username: true,
+  password: true,
+});
+
+export const selectUserById = async (userId: string) => {
+  return db.select().from(users).where(eq(users.userId, userId));
+};
+
+export const selectUserByUsername = async (username: string) => {
+  return db.select().from(users).where(eq(users.username, username));
 };
