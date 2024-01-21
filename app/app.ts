@@ -40,3 +40,13 @@ app.get('/', async (req, res, next) => {
 });
 
 app.use(authRouter);
+
+const errorHandler: express.ErrorRequestHandler = (err, _req, res, next) => {
+  if (err.name === 'UnauthorizedError') {
+    console.log(err.message);
+    return res.clearCookie('access_token').redirect('/');
+  }
+  next(err);
+};
+
+app.use(errorHandler);
