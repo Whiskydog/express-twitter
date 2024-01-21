@@ -23,6 +23,7 @@ app.use(
     },
   })
 );
+app.use(express.static('./public'));
 
 app.get('/', async (req, res, next) => {
   if (!req.auth) return res.redirect('/login');

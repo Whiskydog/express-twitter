@@ -1,7 +1,8 @@
 html
   head
     title Express Twitter
+    link(href='./styles/styles.css', rel='stylesheet')
   body
-    h1 Greetings #{displayName}!
-    form(action='/logout' method='post')
+    h1(class='bg-sky-100 bg-center px-2 text-center') Greetings #{ displayName }!
+    form(action='/logout', method='post')
       button Logout
