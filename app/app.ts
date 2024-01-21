@@ -2,8 +2,8 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import helmet from 'helmet';
-import { expressjwt } from 'express-jwt';
 import favicon from 'serve-favicon';
+import { expressjwt, Request } from 'express-jwt';
 import { selectUserById } from '../db/db';
 import authRouter from '../routes/auth';
 
@@ -29,7 +29,7 @@ app.use(
 );
 app.use(express.static('./public'));
 
-app.get('/', async (req, res, next) => {
+app.get('/', async (req: Request, res, next) => {
   if (!req.auth) return res.redirect('/login');
   try {
     const user = (await selectUserById(req.auth.userId))[0];

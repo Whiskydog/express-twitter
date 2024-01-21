@@ -8,10 +8,11 @@ import {
 import { nanoid } from 'nanoid';
 import { compare, hash } from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { Request } from 'express-jwt';
 
 const authRouter = express.Router();
 
-authRouter.get('/login', (req, res) => {
+authRouter.get('/login', (req: Request, res) => {
   if (req.auth) return res.redirect('/');
   res.render('login');
 });
@@ -35,7 +36,7 @@ authRouter.post('/login', async (req, res, next) => {
   }
 });
 
-authRouter.get('/register', (req, res) => {
+authRouter.get('/register', (req: Request, res) => {
   if (req.auth) return res.redirect('/');
   res.render('register');
 });
