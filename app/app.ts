@@ -7,7 +7,7 @@ import { expressjwt, Request } from 'express-jwt';
 import { selectUserById } from '../db/db';
 import authRouter from '../routes/auth';
 
-export const app = express();
+const app = express();
 
 app.set('view engine', 'pug');
 app.use(helmet());
@@ -50,3 +50,5 @@ const errorHandler: express.ErrorRequestHandler = (err, _req, res, next) => {
 };
 
 app.use(errorHandler);
+
+export default app;
