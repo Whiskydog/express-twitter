@@ -1,0 +1,12 @@
+doctype html
+html
+  head
+    title Express Twitter
+    link(href='/styles/styles.css', rel='stylesheet')
+  body(class='flex min-h-screen flex-col')
+    include includes/navbar
+    main(class='mx-auto w-3/4 max-w-screen-md flex-1 border-x-2 border-base-200 p-6')
+      block main
+    footer(class='footer footer-center bg-base-300 p-2 text-base-content')
+      aside
+        p All rights reserved

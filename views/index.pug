@@ -1,8 +1,11 @@
-html
-  head
-    title Express Twitter
-    link(href='./styles/styles.css', rel='stylesheet')
-  body
-    h1(class='bg-sky-100 bg-center px-2 text-center') Greetings #{ displayName }!
-    form(action='/logout', method='post')
-      button Logout
+extends layout
+include includes/mixins
+
+block main
+  include includes/new-post
+  div(class='divider')
+  if !posts
+    include includes/empty-posts
+  else
+    each post in posts
+      +post(post, false)

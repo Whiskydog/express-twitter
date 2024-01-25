@@ -4,13 +4,22 @@ import morgan from 'morgan';
 import helmet from 'helmet';
 import favicon from 'serve-favicon';
 import { expressjwt, Request } from 'express-jwt';
-import { selectUserById } from '../db/db';
+import { selectAllPosts } from '../db/db';
 import authRouter from '../routes/auth';
+import postsRouter from '../routes/posts';
 
 const app = express();
 
 app.set('view engine', 'pug');
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        'script-src': ["'self'", "'unsafe-inline'"],
+      },
+    },
+  })
+);
 app.use(cookieParser());
 app.use(favicon('./public/favicon.ico'));
 app.use(morgan('tiny'));
@@ -32,14 +41,15 @@ app.use(express.static('./public'));
 app.get('/', async (req: Request, res, next) => {
   if (!req.auth) return res.redirect('/login');
   try {
-    const user = (await selectUserById(req.auth.userId))[0];
-    res.render('index', { displayName: user.displayName });
+    const posts = await selectAllPosts();
+    res.render('index', { posts });
   } catch (e) {
     next(e);
   }
 });
 
 app.use(authRouter);
+app.use('/posts', postsRouter);
 
 const errorHandler: express.ErrorRequestHandler = (err, _req, res, next) => {
   if (err.name === 'UnauthorizedError') {

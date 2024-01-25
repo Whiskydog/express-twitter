@@ -3,14 +3,14 @@ html
     title Register
   body
     h1 Register new user
-    form(action='/register' method='post')
+    form(action='/register', method='post')
       div
         label(for='username') Username
-        input(type='text' name='username' id='username')
+        input#username(type='text', name='username')
       div
         label(for='password') Password
-        input(type='password' name='password' id='password')
+        input#password(type='password', name='password')
       div
         label(for='display-name') Display name
-        input(type='text' name='displayName' id='display-name')
+        input#display-name(type='text', name='displayName')
       button Register
