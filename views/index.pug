@@ -4,8 +4,8 @@ include includes/mixins
 block main
   include includes/new-post
   div(class='divider')
-  if !posts
-    include includes/empty-posts
-  else
+  div(class='flex flex-col gap-6')
     each post in posts
       +post(post, false)
+    else
+      include includes/empty-posts

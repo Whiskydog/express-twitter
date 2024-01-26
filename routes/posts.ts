@@ -24,7 +24,7 @@ postsRouter.post('/', async (req, res, next) => {
 
 postsRouter.get('/:id', async (req, res) => {
   const post = (await selectPostById(req.params.id))[0];
-  res.render('post', { post });
+  res.render('post', { post, replies: [], referrer: req.get('Referrer') });
 });
 
 export default postsRouter;

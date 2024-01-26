@@ -13,6 +13,7 @@ const app = express();
 app.set('view engine', 'pug');
 app.use(
   helmet({
+    referrerPolicy: { policy: 'same-origin' },
     contentSecurityPolicy: {
       directives: {
         'script-src': ["'self'", "'unsafe-inline'"],
