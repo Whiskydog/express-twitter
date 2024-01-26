@@ -1,14 +1,67 @@
+doctype html
 html
   head
-    title Log in
+    title Express Twitter - Log in
+    link(href='/styles/styles.css', rel='stylesheet')
   body
-    h1 Please log in
-    form(action='/login', method='post')
-      div
-        label(for='username') Username
-        input#username(type='text', name='username')
-      div
-        label(for='password') Password
-        input#password(type='password', name='password')
-      button Log in
-      a(href='/register') Register
+    div(class='container mx-auto flex flex-col items-center gap-8 py-8')
+      div(class='grid-cols2 grid max-w-96 grid-cols-1 divide-y rounded-md bg-base-300')
+        div(class='flex flex-col items-center px-6 py-4')
+          svg(
+            xmlns='http://www.w3.org/2000/svg',
+            fill='none',
+            viewbox='0 0 24 24',
+            stroke-width='1.5',
+            stroke='currentColor',
+            class='h-12 w-12'
+          )
+            path(
+              stroke-linecap='round',
+              stroke-linejoin='round',
+              d='M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z'
+            )
+          h1(class='text-2xl font-bold tracking-tight') Login
+        form(class='flex flex-col p-6', action='/login', method='post')
+          label(class='form-control max-w-60')
+            div(class='label pt-0')
+              span(class='label-text text-sm') Username
+            input#username(class='input input-bordered', type='text', name='username')
+          label(class='form-control max-w-60')
+            div(class='label')
+              span(class='label-text text-sm') Password
+            input#password(
+              class='input input-bordered',
+              type='password',
+              name='password'
+            )
+          div(class='mt-5 flex justify-end gap-4')
+            a(class='btn btn-secondary', role='button', href='/register')
+              svg(
+                xmlns='http://www.w3.org/2000/svg',
+                fill='none',
+                viewbox='0 0 24 24',
+                stroke-width='1.5',
+                stroke='currentColor',
+                class='h-6 w-6'
+              )
+                path(
+                  stroke-linecap='round',
+                  stroke-linejoin='round',
+                  d='M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z'
+                )
+              | Register
+            button(class='btn btn-primary')
+              svg(
+                xmlns='http://www.w3.org/2000/svg',
+                fill='none',
+                viewbox='0 0 24 24',
+                stroke-width='1.5',
+                stroke='currentColor',
+                class='h-6 w-6'
+              )
+                path(
+                  stroke-linecap='round',
+                  stroke-linejoin='round',
+                  d='M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15M12 9l3 3m0 0-3 3m3-3H2.25'
+                )
+              | Log in
