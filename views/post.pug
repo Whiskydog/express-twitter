@@ -1,5 +1,6 @@
 extends layout
-include includes/mixins
+include components/post
+include components/new-post
 
 block main
   if (referrer)
@@ -19,6 +20,8 @@ block main
         )
       | Back
   +post(post, true)
+  div(class='mt-4')
+    +new-post(`/posts/${post.id}/reply`, 'Write a reply...', 'Reply')
   div(class='divider')
     | Replies
   div(class='flex flex-col gap-4')

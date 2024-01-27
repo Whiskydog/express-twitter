@@ -2,7 +2,7 @@ import { createClient } from '@libsql/client';
 import { drizzle } from 'drizzle-orm/libsql';
 import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import { desc, eq } from 'drizzle-orm';
+import { desc, eq, isNull } from 'drizzle-orm';
 
 const client = createClient({
   url: `file:${process.env.DB_URL}`,
@@ -81,5 +81,19 @@ export const selectAllPosts = async () => {
     })
     .from(posts)
     .innerJoin(users, eq(users.userId, posts.userId))
+    .where(isNull(posts.replyTo))
     .orderBy(desc(posts.timestamp));
+};
+
+export const selectAllReplies = async (postId: string) => {
+  return db
+    .select({
+      id: posts.postId,
+      author: users.displayName,
+      timestamp: posts.timestamp,
+      content: posts.content,
+    })
+    .from(posts)
+    .innerJoin(users, eq(users.userId, posts.userId))
+    .where(eq(posts.replyTo, postId));
 };
