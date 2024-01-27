@@ -4,7 +4,7 @@ include components/new-post
 
 block main
   if (referrer)
-    a#back(role='button', class='btn btn-sm mb-2', href=referrer)
+    a#back(role='button', class='btn btn-sm mb-2')
       svg(
         xmlns='http://www.w3.org/2000/svg',
         fill='none',
@@ -29,3 +29,19 @@ block main
       +post(reply, false)
     else
       include includes/empty-posts
+  script.
+    if (!document.referrer) {
+      sessionStorage.setItem('referrers', JSON.stringify([location.href]));
+    } else {
+      const refs = JSON.parse(String(sessionStorage.getItem('referrers')));
+      const backBtn = document.getElementById('back');
+      sessionStorage.setItem('referrers', JSON.stringify([...refs, location.href]));
+      if (!refs.length) {
+        backBtn.remove();
+      } else {
+        backBtn.href = refs.pop();
+        backBtn.onclick = () => {
+          sessionStorage.setItem('referrers', JSON.stringify(refs));
+        };
+      }
+    }

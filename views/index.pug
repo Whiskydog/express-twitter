@@ -10,3 +10,5 @@ block main
       +post(post, false)
     else
       include includes/empty-posts
+  script.
+    sessionStorage.setItem('referrers', JSON.stringify([location.href]));

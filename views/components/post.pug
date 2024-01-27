@@ -23,7 +23,11 @@ mixin post(post, isPage)
             )
           | Like
         if !isPage
-          a(role='button', class='btn btn-secondary', href=`/posts/${post.id}`)
+          a#show-more(
+            role='button',
+            class='btn btn-secondary',
+            href=`/posts/${post.id}`
+          )
             svg(
               xmlns='http://www.w3.org/2000/svg',
               fill='none',
