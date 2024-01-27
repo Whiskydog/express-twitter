@@ -39,8 +39,12 @@ app.use(
 );
 app.use(express.static('./public'));
 
-app.get('/', async (req: Request, res, next) => {
+app.use(/^\/(?!(login|register)).*$/, (req, res, next) => {
   if (!req.auth) return res.redirect('/login');
+  next();
+});
+
+app.get('/', async (_req: Request, res, next) => {
   try {
     const posts = await selectAllPosts();
     res.render('index', { posts });
