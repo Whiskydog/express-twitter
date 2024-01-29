@@ -40,8 +40,6 @@ block main
         backBtn.remove();
       } else {
         backBtn.href = refs.pop();
-        backBtn.onclick = () => {
-          sessionStorage.setItem('referrers', JSON.stringify(refs));
-        };
+        backBtn.onclick = () => sessionStorage.setItem('referrers', JSON.stringify(refs));
       }
     }
