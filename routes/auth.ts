@@ -1,4 +1,4 @@
-import express from 'express';
+import { Router } from 'express';
 import {
   insertUser,
   requestInsertUserSchema,
@@ -10,7 +10,7 @@ import { compare, hash } from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { Request } from 'express-jwt';
 
-const authRouter = express.Router();
+const authRouter = Router();
 
 authRouter.get('/login', (req: Request, res) => {
   if (req.auth) return res.redirect('/');

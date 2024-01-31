@@ -3,10 +3,11 @@ import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import helmet from 'helmet';
 import favicon from 'serve-favicon';
-import { expressjwt, Request } from 'express-jwt';
-import { selectAllPosts } from '../db/db';
+import { expressjwt } from 'express-jwt';
 import authRouter from '../routes/auth';
 import postsRouter from '../routes/posts';
+import indexRouter from '../routes';
+import errorHandler from '../middlewares/errors';
 
 const app = express();
 
@@ -37,33 +38,16 @@ app.use(
     },
   })
 );
-app.use(express.static('./public'));
+app.use(express.static('public'));
 
 app.use(/^\/(?!(login|register)).*$/, (req, res, next) => {
   if (!req.auth) return res.redirect('/login');
   next();
 });
 
-app.get('/', async (_req: Request, res, next) => {
-  try {
-    const posts = await selectAllPosts();
-    res.render('index', { posts });
-  } catch (e) {
-    next(e);
-  }
-});
-
+app.use(indexRouter);
 app.use(authRouter);
 app.use('/posts', postsRouter);
-
-const errorHandler: express.ErrorRequestHandler = (err, _req, res, next) => {
-  if (err.name === 'UnauthorizedError') {
-    console.log(err.message);
-    return res.clearCookie('access_token').redirect('/');
-  }
-  next(err);
-};
-
 app.use(errorHandler);
 
 export default app;

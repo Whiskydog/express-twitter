@@ -1,4 +1,4 @@
-import express from 'express';
+import { Router } from 'express';
 import {
   insertPost,
   requestInsertPostSchema,
@@ -7,7 +7,7 @@ import {
 } from '../db/db';
 import { nanoid } from 'nanoid';
 
-const postsRouter = express.Router();
+const postsRouter = Router();
 
 postsRouter.post('/', async (req, res, next) => {
   try {
