@@ -1,20 +1,20 @@
 mixin post(post, isPage)
   div(class='card bg-base-200')
     div(class='card-body')
-      div(class='card-title')
-        h2(class='flex-1') #{ post.author } said...
-        p(class='flex-none text-xs') on
+      div(class='card-title justify-between')
+        h2(class='flex-none text-lg leading-none md:text-xl') #{ post.author } said...
+        p(class='flex-initial text-xs') on
           != ` ${new Date(post.timestamp).toLocaleString()}`
       p(class='px-4')= post.content
       div(class='card-actions mt-4 justify-end')
-        button(class='btn btn-primary')
+        button(class='btn btn-primary btn-sm md:btn-md')
           svg(
             xmlns='http://www.w3.org/2000/svg',
             fill='none',
             viewbox='0 0 24 24',
             stroke-width='1.5',
             stroke='currentColor',
-            class='h-6 w-6'
+            class='h-4 w-4 md:h-6 md:w-6'
           )
             path(
               stroke-linecap='round',
@@ -25,7 +25,7 @@ mixin post(post, isPage)
         if !isPage
           a#show-more(
             role='button',
-            class='btn btn-secondary',
+            class='btn btn-secondary btn-sm md:btn-md',
             href=`/posts/${post.id}`
           )
             svg(
@@ -34,7 +34,7 @@ mixin post(post, isPage)
               viewbox='0 0 24 24',
               stroke-width='1.5',
               stroke='currentColor',
-              class='h-6 w-6'
+              class='h-4 w-4 md:h-6 md:w-6'
             )
               path(
                 stroke-linecap='round',

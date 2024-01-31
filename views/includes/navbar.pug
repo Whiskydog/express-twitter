@@ -4,7 +4,11 @@ nav(class='navbar bg-base-300 px-4')
       class='flex cursor-pointer items-center hover:drop-shadow-xl hover:transition-all',
       href='/'
     )
-      svg(viewbox='0 0 72 72', xmlns='http://www.w3.org/2000/svg', class='h-12 w-12')
+      svg(
+        viewbox='0 0 72 72',
+        xmlns='http://www.w3.org/2000/svg',
+        class='h-8 min-h-8 w-8 min-w-8 md:h-12 md:w-12'
+      )
         g
           path(
             fill='#fcea2b',
@@ -119,16 +123,16 @@ nav(class='navbar bg-base-300 px-4')
             stroke-width='2',
             d='m42,36c2,9,9,9,9,9,2-6-6-11-6-11,7-6,1-10,1-10,0-10-10.375-11-10.375-11-10.375,2-9.625,11-9.625,11-6,4,.625,9.75.625,9.75,0,0-7.625,4.25-5.625,11.25,0,0,8,0,8-9'
           )
-      h1(class='text-2xl font-bold tracking-tight') Express Twitter
-  div(class='navbar-end flex gap-4')
-    button(class='btn btn-neutral')
+      h1(class='text-lg font-bold leading-none tracking-tight md:text-2xl') Express Twitter
+  div(class='navbar-end flex min-w-fit gap-2 md:gap-4')
+    button(class='btn btn-neutral btn-sm md:btn-md')
       svg(
         xmlns='http://www.w3.org/2000/svg',
         fill='none',
         viewbox='0 0 24 24',
         stroke-width='1.5',
         stroke='currentColor',
-        class='h-6 w-6'
+        class='h-4 w-4 md:h-6 md:w-6'
       )
         path(
           stroke-linecap='round',
@@ -137,14 +141,14 @@ nav(class='navbar bg-base-300 px-4')
         )
       | Profile
     a(href='/logout')
-      button(class='btn btn-neutral')
+      button(class='btn btn-neutral btn-sm md:btn-md')
         svg(
           xmlns='http://www.w3.org/2000/svg',
           fill='none',
           viewbox='0 0 24 24',
           stroke-width='1.5',
           stroke='currentColor',
-          class='h-6 w-6'
+          class='h-4 w-4 md:h-6 md:w-6'
         )
           path(
             stroke-linecap='round',
