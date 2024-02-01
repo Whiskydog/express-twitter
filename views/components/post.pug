@@ -3,8 +3,7 @@ mixin post(post, isPage)
     div(class='card-body')
       div(class='card-title justify-between')
         h2(class='flex-none text-lg leading-none md:text-xl') #{ post.author } said...
-        p(class='flex-initial text-xs') on
-          != ` ${new Date(post.timestamp).toLocaleString()}`
+        p(class='flex-initial text-xs')= post.postedOn
       p(class='px-4')= post.content
       div(class='card-actions mt-4 justify-end')
         button(class='btn btn-primary btn-sm md:btn-md')

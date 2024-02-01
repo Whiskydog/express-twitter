@@ -1,50 +1,34 @@
-import { Router } from 'express';
-import {
-  insertPost,
-  requestInsertPostSchema,
-  selectAllReplies,
-  selectPostById,
-} from '../db/db';
-import { nanoid } from 'nanoid';
+import { Router, Response, NextFunction } from 'express';
+import { Request } from 'express-jwt';
+import postsService from '../services/postsService';
 
 const postsRouter = Router();
 
-postsRouter.post('/', async (req, res, next) => {
-  try {
-    const { content } = requestInsertPostSchema.parse(req.body);
-    const postId = nanoid();
-    const userId = req.auth?.userId;
-    const newPost = {
-      postId,
-      content,
-      timestamp: Date.now(),
-      userId: String(userId),
-    };
-    await insertPost(newPost);
-    res.redirect(`/posts/${postId}`);
-  } catch (e) {
-    next(e);
+postsRouter.post(
+  '/',
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = req.auth?.userId;
+      const postId = await postsService.createNewPost(
+        String(req.body),
+        String(userId)
+      );
+      res.redirect(`/posts/${postId}`);
+    } catch (e) {
+      next(e);
+    }
   }
-});
+);
 
-postsRouter.get('/:id', async (req, res) => {
-  const post = (await selectPostById(req.params.id))[0];
-  const replies = await selectAllReplies(req.params.id);
+postsRouter.get('/:id', async (req: Request, res: Response) => {
+  const post = await postsService.getById(req.params.id);
+  const replies = await postsService.getRepliesTo(req.params.id);
   res.render('post', { post, replies, referrer: req.get('Referrer') });
 });
 
-postsRouter.post('/:id/reply', async (req, res) => {
-  const { content } = requestInsertPostSchema.parse(req.body);
-  const postId = nanoid();
+postsRouter.post('/:id/reply', async (req: Request, res: Response) => {
   const userId = req.auth?.userId;
-  const newPost = {
-    postId,
-    content,
-    timestamp: Date.now(),
-    userId: String(userId),
-    replyTo: req.params.id,
-  };
-  await insertPost(newPost);
+  const postId = await postsService.createNewPost(String(req.body), userId!);
   res.redirect(`/posts/${postId}`);
 });
 

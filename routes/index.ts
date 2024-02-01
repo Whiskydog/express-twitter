@@ -1,10 +1,11 @@
-import express from 'express';
-import { selectAllPosts } from '../db/db';
+import { Router, Response } from 'express';
+import { Request } from 'express-jwt';
+import postsService from '../services/postsService';
 
-const indexRouter = express.Router();
+const indexRouter = Router();
 
-indexRouter.get('/', async (_req, res) => {
-  const posts = await selectAllPosts();
+indexRouter.get('/', async (_req: Request, res: Response) => {
+  const posts = await postsService.getAll();
   res.render('index', { posts });
 });
 

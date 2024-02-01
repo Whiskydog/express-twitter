@@ -28,7 +28,7 @@ app.use(morgan('tiny'));
 app.use(express.urlencoded({ extended: true }));
 app.use(
   expressjwt({
-    secret: process.env.ACCESS_TOKEN_SECRET as string,
+    secret: process.env.ACCESS_TOKEN_SECRET,
     algorithms: ['HS256'],
     credentialsRequired: false,
     getToken: (req) => {
