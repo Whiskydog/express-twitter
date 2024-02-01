@@ -8,11 +8,9 @@ postsRouter.post(
   '/',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const userId = req.auth?.userId;
-      const postId = await postsService.createNewPost(
-        req.body as string,
-        userId as string
-      );
+      const userId = req.auth?.userId as string;
+      const content = req.body as string;
+      const postId = await postsService.createNewPost(content, userId);
       res.redirect(`/posts/${postId}`);
     } catch (e) {
       next(e);
@@ -27,8 +25,8 @@ postsRouter.get('/:id', async (req: Request, res: Response) => {
 });
 
 postsRouter.post('/:id/reply', async (req: Request, res: Response) => {
-  const userId = req.auth?.userId;
-  const postId = await postsService.createNewPost(String(req.body), userId!);
+  const userId = req.auth?.userId as string;
+  const postId = await postsService.createNewPost(String(req.body), userId);
   res.redirect(`/posts/${postId}`);
 });
 
