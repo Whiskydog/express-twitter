@@ -1,11 +1,11 @@
 import {
   insertPost,
-  requestInsertPostSchema,
   selectAllPosts,
   selectAllReplies,
   selectPostById,
-} from '../db/db';
-import Post from '../models/Post';
+} from '@db/db';
+import { requestInsertSchema } from '@db/schemas/posts';
+import Post from '@/models/Post';
 import { nanoid } from 'nanoid';
 
 const getAll = async (): Promise<Post[]> => {
@@ -27,7 +27,7 @@ const createNewPost = async (
   content: string,
   userId: string
 ): Promise<string> => {
-  requestInsertPostSchema.parse(content);
+  requestInsertSchema.parse(content);
   const postId = nanoid();
   const newPost = {
     postId,

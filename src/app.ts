@@ -1,17 +1,18 @@
-import express from 'express';
+import express, { Response, NextFunction } from 'express';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import helmet from 'helmet';
 import favicon from 'serve-favicon';
-import { expressjwt } from 'express-jwt';
-import authRouter from '../routes/auth';
-import postsRouter from '../routes/posts';
-import indexRouter from '../routes';
-import errorHandler from '../middlewares/errors';
+import { expressjwt, Request } from 'express-jwt';
+import authRouter from '@/routes/authRouter';
+import postsRouter from '@/routes/postsRouter';
+import indexRouter from '@/routes/indexRouter';
+import errorHandler from '@/middlewares/errorHandler';
 
 const app = express();
 
 app.set('view engine', 'pug');
+app.set('views', 'src/views');
 app.use(
   helmet({
     referrerPolicy: { policy: 'same-origin' },
@@ -40,10 +41,13 @@ app.use(
 );
 app.use(express.static('public'));
 
-app.use(/^\/(?!(login|register)).*$/, (req, res, next) => {
-  if (!req.auth) return res.redirect('/login');
-  next();
-});
+app.use(
+  /^\/(?!(login|register)).*$/,
+  (req: Request, res: Response, next: NextFunction) => {
+    if (!req.auth) return res.redirect('/login');
+    next();
+  }
+);
 
 app.use(indexRouter);
 app.use(authRouter);

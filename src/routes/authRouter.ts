@@ -1,14 +1,10 @@
-import { Router, Response, NextFunction } from 'express';
+import { NextFunction, Response, Router } from 'express';
 import { Request } from 'express-jwt';
-import {
-  insertUser,
-  requestInsertUserSchema,
-  requestSelectUserSchema,
-  selectUserByUsername,
-} from '../db/db';
+import jwt from 'jsonwebtoken';
 import { nanoid } from 'nanoid';
 import { compare, hash } from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import { insertUser, selectUserByUsername } from '@db/db';
+import { requestInsertSchema, requestSelectSchema } from '@db/schemas/users';
 
 const authRouter = Router();
 
@@ -21,7 +17,7 @@ authRouter.post(
   '/login',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { username, password } = requestSelectUserSchema.parse(req.body);
+      const { username, password } = requestSelectSchema.parse(req.body);
       const matchedUsers = await selectUserByUsername(username);
       if (matchedUsers.length === 0) return res.redirect('/login');
       const user = matchedUsers[0];
@@ -48,7 +44,7 @@ authRouter.post(
   '/register',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const user = requestInsertUserSchema.parse(req.body);
+      const user = requestInsertSchema.parse(req.body);
       const userInsert = {
         userId: nanoid(),
         username: user.username,

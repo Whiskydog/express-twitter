@@ -1,6 +1,6 @@
 import { Router, Response, NextFunction } from 'express';
 import { Request } from 'express-jwt';
-import postsService from '../services/postsService';
+import postsService from '@/services/postsService';
 
 const postsRouter = Router();
 
@@ -10,8 +10,8 @@ postsRouter.post(
     try {
       const userId = req.auth?.userId;
       const postId = await postsService.createNewPost(
-        String(req.body),
-        String(userId)
+        req.body as string,
+        userId as string
       );
       res.redirect(`/posts/${postId}`);
     } catch (e) {

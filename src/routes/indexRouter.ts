@@ -1,6 +1,6 @@
 import { Router, Response } from 'express';
 import { Request } from 'express-jwt';
-import postsService from '../services/postsService';
+import postsService from '@/services/postsService';
 
 const indexRouter = Router();
 
