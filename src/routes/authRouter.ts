@@ -8,6 +8,14 @@ import { requestInsertSchema, requestSelectSchema } from '@db/schemas/users';
 
 const authRouter = Router();
 
+authRouter.use(
+  /^\/(?!(login|register)).*$/,
+  (req: Request, res: Response, next: NextFunction) => {
+    if (!req.auth) return res.redirect('/login');
+    next();
+  }
+);
+
 authRouter.get('/login', (req: Request, res: Response) => {
   if (req.auth) return res.redirect('/');
   res.render('login');

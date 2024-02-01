@@ -1,9 +1,9 @@
-import express, { Response, NextFunction } from 'express';
+import express from 'express';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import helmet from 'helmet';
 import favicon from 'serve-favicon';
-import { expressjwt, Request } from 'express-jwt';
+import { expressjwt } from 'express-jwt';
 import authRouter from '@/routes/authRouter';
 import postsRouter from '@/routes/postsRouter';
 import indexRouter from '@/routes/indexRouter';
@@ -41,16 +41,8 @@ app.use(
 );
 app.use(express.static('public'));
 
-app.use(
-  /^\/(?!(login|register)).*$/,
-  (req: Request, res: Response, next: NextFunction) => {
-    if (!req.auth) return res.redirect('/login');
-    next();
-  }
-);
-
-app.use(indexRouter);
 app.use(authRouter);
+app.use(indexRouter);
 app.use('/posts', postsRouter);
 app.use(errorHandler);
 
