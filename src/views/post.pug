@@ -3,6 +3,9 @@ include components/post
 include components/new-post
 
 block main
+  if (error)
+    include components/alert-error
+    +alert-error(error)
   if (referrer)
     a#back(role='button', class='btn btn-sm mb-2')
       svg(
@@ -30,12 +33,17 @@ block main
     else
       include includes/empty-posts
   script.
+    const url = `${location.origin}${location.pathname}`;
     if (!document.referrer) {
-      sessionStorage.setItem('referrers', JSON.stringify([location.href]));
+      sessionStorage.setItem('referrers', JSON.stringify([url]));
     } else {
       const refs = JSON.parse(String(sessionStorage.getItem('referrers')));
       const backBtn = document.getElementById('back');
-      sessionStorage.setItem('referrers', JSON.stringify([...refs, location.href]));
+      if (!location.search.includes('error')) {
+        sessionStorage.setItem('referrers', JSON.stringify([...refs, url]));
+      } else {
+        refs.pop();
+      }
       if (!refs.length) {
         backBtn.remove();
       } else {
