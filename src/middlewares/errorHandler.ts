@@ -1,22 +1,18 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
+import { Request } from 'express-jwt';
 
 const errorHandler = (
   err: Error,
   _req: Request,
   res: Response,
-  next: NextFunction
+  _next: NextFunction
 ) => {
   switch (err.name) {
-    case 'SyntaxError':
-      return res.status(400).send(err.message);
-    case 'ValidationError':
-      return res.status(400).send(err.message);
     case 'UnauthorizedError':
-      return res.clearCookie('access_token').status(401).send(err.message);
-    case 'LibsqlError':
-      return res.status(400).send(err.message);
+      return res.clearCookie('access_token').status(401).redirect('/login');
   }
-  next(err);
+  console.error(err);
+  res.status(500).send('Internal server error');
 };
 
 export default errorHandler;
