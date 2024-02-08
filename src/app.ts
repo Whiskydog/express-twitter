@@ -7,6 +7,7 @@ import { expressjwt } from 'express-jwt';
 import authRouter from '@/routes/auth';
 import postsRouter from '@/routes/posts';
 import rootRouter from '@/routes/root';
+import errorHandler from '@/middlewares/errors';
 
 const app = express();
 

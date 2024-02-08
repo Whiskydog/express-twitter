@@ -1,6 +1,6 @@
 import { Router, Response, NextFunction } from 'express';
 import { Request } from 'express-jwt';
-import postsService from '@/services/postsService';
+import postsService from '@/services/posts';
 import { formInsertSchema, requestInsertSchema } from '@db/schemas/posts';
 import { ZodError } from 'zod';
 import { fromZodError } from 'zod-validation-error';
