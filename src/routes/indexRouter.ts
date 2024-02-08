@@ -4,8 +4,9 @@ import postsService from '@/services/postsService';
 
 const indexRouter = Router();
 
-indexRouter.get('/', async (_req: Request, res: Response) => {
+indexRouter.get('/', async (req: Request, res: Response) => {
   const posts = await postsService.getAll();
+  if (req.query.error) res.locals.error = req.query.error;
   res.render('index', { posts });
 });
 

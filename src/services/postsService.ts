@@ -4,9 +4,9 @@ import {
   selectAllReplies,
   selectPostById,
 } from '@db/db';
-import { requestInsertSchema } from '@db/schemas/posts';
 import Post from '@/models/Post';
 import { nanoid } from 'nanoid';
+import { NewPostSchema } from '@db/schemas/posts';
 
 const getAll = async (): Promise<Post[]> => {
   const posts = await selectAllPosts();
@@ -23,19 +23,9 @@ const getRepliesTo = async (id: string): Promise<Post[]> => {
   return replies.map((reply) => new Post(reply));
 };
 
-const createNewPost = async (
-  content: string,
-  userId: string
-): Promise<string> => {
-  requestInsertSchema.parse(content);
+const createNewPost = async (newPost: NewPostSchema): Promise<string> => {
   const postId = nanoid();
-  const newPost = {
-    postId,
-    content,
-    timestamp: Date.now(),
-    userId,
-  };
-  await insertPost(newPost);
+  await insertPost({ postId, ...newPost, timestamp: Date.now() });
   return postId;
 };
 

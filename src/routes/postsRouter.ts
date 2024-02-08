@@ -1,18 +1,34 @@
 import { Router, Response, NextFunction } from 'express';
 import { Request } from 'express-jwt';
 import postsService from '@/services/postsService';
+import { formInsertSchema, requestInsertSchema } from '@db/schemas/posts';
+import { ZodError } from 'zod';
+import { fromZodError } from 'zod-validation-error';
 
 const postsRouter = Router();
 
 postsRouter.post(
   '/',
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (
+    req: Request<{ userId: string }>,
+    res: Response,
+    next: NextFunction
+  ) => {
     try {
-      const userId = req.auth?.userId as string;
-      const content = req.body as string;
-      const postId = await postsService.createNewPost(content, userId);
+      const newPost = requestInsertSchema.parse({
+        content: req.body?.content as string,
+        userId: req.auth?.userId,
+      });
+      const postId = await postsService.createNewPost(newPost);
       res.redirect(`/posts/${postId}`);
     } catch (e) {
+      if (e instanceof ZodError) {
+        const validationError = fromZodError(e, {
+          prefix: null,
+          includePath: false,
+        });
+        return res.redirect(`/?error=${validationError.message}`);
+      }
       next(e);
     }
   }
@@ -21,13 +37,38 @@ postsRouter.post(
 postsRouter.get('/:id', async (req: Request, res: Response) => {
   const post = await postsService.getById(req.params.id);
   const replies = await postsService.getRepliesTo(req.params.id);
+  if (req.query.error) res.locals.error = req.query.error;
   res.render('post', { post, replies, referrer: req.get('Referrer') });
 });
 
-postsRouter.post('/:id/reply', async (req: Request, res: Response) => {
-  const userId = req.auth?.userId as string;
-  const postId = await postsService.createNewPost(String(req.body), userId);
-  res.redirect(`/posts/${postId}`);
-});
+postsRouter.post(
+  '/:id/reply',
+  async (
+    req: Request<{ userId: string }>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const newPost = requestInsertSchema.parse({
+        content: formInsertSchema.parse(req.body).content,
+        userId: req.auth?.userId,
+        replyTo: req.params.id,
+      });
+      const postId = await postsService.createNewPost(newPost);
+      res.redirect(`/posts/${postId}`);
+    } catch (e) {
+      if (e instanceof ZodError) {
+        const validationError = fromZodError(e, {
+          prefix: null,
+          includePath: false,
+        });
+        return res.redirect(
+          `/posts/${req.params.id}?error=${validationError.message}`
+        );
+      }
+      next(e);
+    }
+  }
+);
 
 export default postsRouter;
