@@ -1,8 +1,9 @@
-import { createClient } from '@libsql/client';
+import { createClient, LibsqlError } from '@libsql/client';
 import { drizzle } from 'drizzle-orm/libsql';
 import { desc, eq, isNull } from 'drizzle-orm';
 import users from './schemas/users';
 import posts from './schemas/posts';
+import StorageError from '@/types/StorageError';
 
 const client = createClient({
   url: `file:${process.env.DB_URL}`,
@@ -11,7 +12,14 @@ const db = drizzle(client);
 
 type NewUser = typeof users.$inferInsert;
 export const insertUser = async (user: NewUser) => {
-  return db.insert(users).values(user);
+  try {
+    return await db.insert(users).values(user);
+  } catch (e) {
+    if (e instanceof LibsqlError && e.code === 'SQLITE_CONSTRAINT_UNIQUE') {
+      throw new StorageError('Username already exists', e.code);
+    }
+    throw new StorageError('Failed to create user', 'UNKNOWN');
+  }
 };
 
 type NewPost = typeof posts.$inferInsert;
