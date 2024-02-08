@@ -1,9 +1,9 @@
 import { Request } from 'express-jwt';
 import { Response } from 'express';
-import postsService from '@/services/posts';
+import postsModel from '@/models/posts';
 
 const showIndexPage = async (req: Request, res: Response) => {
-  const posts = await postsService.getAll();
+  const posts = await postsModel.getAll();
   if (req.query.error) res.locals.error = req.query.error;
   res.render('index', { posts });
 };

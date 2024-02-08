@@ -1,7 +1,7 @@
 import { Request } from 'express-jwt';
 import { NextFunction, Response } from 'express';
 import { formInsertSchema, requestInsertSchema } from '@db/schemas/posts';
-import postsService from '@/services/posts';
+import postsModel from '@/models/posts';
 import { ZodError } from 'zod';
 import { fromZodError } from 'zod-validation-error';
 
@@ -15,7 +15,7 @@ const createPost = async (
       content: formInsertSchema.parse(req.body).content,
       userId: req.auth?.userId,
     });
-    const postId = await postsService.createNewPost(newPost);
+    const postId = await postsModel.createNewPost(newPost);
     res.redirect(`/posts/${postId}`);
   } catch (e) {
     if (e instanceof ZodError) {
@@ -30,8 +30,8 @@ const createPost = async (
 };
 
 const showPostPage = async (req: Request, res: Response) => {
-  const post = await postsService.getById(req.params.id);
-  const replies = await postsService.getRepliesTo(req.params.id);
+  const post = await postsModel.getById(req.params.id);
+  const replies = await postsModel.getRepliesTo(req.params.id);
   if (req.query.error) res.locals.error = req.query.error;
   res.render('post', { post, replies, referrer: req.get('Referrer') });
 };
@@ -47,7 +47,7 @@ const createReply = async (
       userId: req.auth?.userId,
       replyTo: req.params.id,
     });
-    const postId = await postsService.createNewPost(newPost);
+    const postId = await postsModel.createNewPost(newPost);
     res.redirect(`/posts/${postId}`);
   } catch (e) {
     if (e instanceof ZodError) {

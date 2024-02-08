@@ -4,7 +4,7 @@ import {
   selectAllReplies,
   selectPostById,
 } from '@db/db';
-import Post from '@/models/Post';
+import Post from '@/types/Post';
 import { nanoid } from 'nanoid';
 import { NewPostSchema } from '@db/schemas/posts';
 
