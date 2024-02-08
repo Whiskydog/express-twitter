@@ -1,13 +1,8 @@
-import { Router, Response } from 'express';
-import { Request } from 'express-jwt';
-import postsService from '@/services/posts';
+import { Router } from 'express';
+import rootController from '@/controllers/root';
 
 const rootRouter = Router();
 
-rootRouter.get('/', async (req: Request, res: Response) => {
-  const posts = await postsService.getAll();
-  if (req.query.error) res.locals.error = req.query.error;
-  res.render('index', { posts });
-});
+rootRouter.get('/', rootController.showIndexPage);
 
 export default rootRouter;
