@@ -4,10 +4,9 @@ import morgan from 'morgan';
 import helmet from 'helmet';
 import favicon from 'serve-favicon';
 import { expressjwt } from 'express-jwt';
-import authRouter from '@/routes/authRouter';
-import postsRouter from '@/routes/postsRouter';
-import indexRouter from '@/routes/indexRouter';
-import errorHandler from '@/middlewares/errorHandler';
+import authRouter from '@/routes/auth';
+import postsRouter from '@/routes/posts';
+import rootRouter from '@/routes/root';
 
 const app = express();
 
@@ -42,7 +41,7 @@ app.use(
 app.use(express.static('public'));
 
 app.use(authRouter);
-app.use(indexRouter);
+app.use(rootRouter);
 app.use('/posts', postsRouter);
 app.use(errorHandler);
 
